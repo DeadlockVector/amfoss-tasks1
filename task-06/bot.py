@@ -60,4 +60,3 @@ async def getHelp(ctx):
     await ctx.send(message)
 
 client.run(BOT_TOKEN)
-
