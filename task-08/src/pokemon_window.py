@@ -23,10 +23,13 @@ class PokemonWindow(QWidget):
         self.label_pokemonName = QLabel("", self)
         self.label_pokemonName.setGeometry(255, 540, 200, 50)
 
+        # storing the path of each image in a list
+        # using the index value to keep track of which image the user is viewing
+        # changing the index and hence changing the image when buttons are pressed
         self.list_images = []
         self.image_index = 0
-        for path in os.listdir('./task-08/pokemon_images'):
-            self.list_images.append(f"./task-08/pokemon_images/{path}")
+        for path in os.listdir('../task-08/pokemon_images'):
+            self.list_images.append(f"../task-08/pokemon_images/{path}")
         self.pokemon_image_label = QLabel(self)
         self.pokemon_image_label.setGeometry(25, 25, 500, 500)
         if len(self.list_images) != 0:
@@ -35,17 +38,16 @@ class PokemonWindow(QWidget):
             self.label_pokemonName.setText(self.list_images[self.image_index][25:-4].capitalize())
 
     def goLeft(self):
-        # Decrement the image index
         self.image_index -= 1
         if self.image_index < 0:
-            self.image_index = len(self.list_images) - 1  # Wrap around to the last image if at the beginning
+            self.image_index = len(self.list_images) - 1  
         self.update_image()
         
     def goRight(self):
-        # Increment the image index
+        
         self.image_index += 1
         if self.image_index >= len(self.list_images):
-            self.image_index = 0  # Wrap around to the first image if at the end
+            self.image_index = 0  
         self.update_image()
 
     def update_image(self):

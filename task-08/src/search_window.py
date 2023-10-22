@@ -1,9 +1,11 @@
-from PySide6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton
+from PySide6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QDialog, QVBoxLayout
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 import requests
 import shutil
 import os
+
+from pokemon_window import PokemonWindow
 
 class SearchWindow(QWidget):
     """
@@ -37,7 +39,7 @@ class SearchWindow(QWidget):
         
 
         self.background = QLabel(self)
-        pixmap = QPixmap("./task-08/assets/landing.jpg")
+        pixmap = QPixmap("../task-08/assets/landing.jpg")
         self.background.setPixmap(pixmap)
         self.background.setGeometry(0, 0, 850, 500)
         self.background.lower()
@@ -57,6 +59,7 @@ class SearchWindow(QWidget):
 
         display_button = QPushButton("Display", self)
         display_button.setGeometry(50, 400, 160, 43)
+        display_button.clicked.connect(self.getPoke)
 
         
         self.image_label = QLabel(self)
@@ -101,7 +104,24 @@ class SearchWindow(QWidget):
         self.label11 = QLabel("", self) 
         self.label11.setGeometry(500, 405, 200, 43)
         #self.label11.setStyleSheet("color: white;")
-        
+    
+    def captureConfirmed(self):
+        capture_message = QDialog()
+        capture_message.setWindowTitle("Captured!")
+        capture_message.setFixedSize(300, 100)
+        layout = QVBoxLayout()
+
+        label = QLabel("Pokemon is captured!", capture_message)
+        label.setAlignment(Qt.AlignCenter)
+
+        ok_button = QPushButton("OK", capture_message)
+        ok_button.clicked.connect(capture_message.accept)
+
+        layout.addWidget(label)
+        layout.addWidget(ok_button)
+
+        capture_message.setLayout(layout)
+        capture_message.exec_()
 
     ## TO-DO ##
 
@@ -118,12 +138,12 @@ class SearchWindow(QWidget):
 
                 official_artwork_url = response['sprites']['other']['official-artwork']['front_default']
                 image_response = requests.get(official_artwork_url, stream=True)
-                with open(f"./task-08/{pokemon_name}.png", 'wb') as out_file:
+                with open(f"../task-08/{pokemon_name}.png", 'wb') as out_file:
                     shutil.copyfileobj(image_response.raw, out_file)
 
-                image_pixmap = QPixmap(f"./task-08/{pokemon_name}.png")
+                image_pixmap = QPixmap(f"../task-08/{pokemon_name}.png")
                 self.image_label.setPixmap(image_pixmap.scaled(self.image_label.size(), Qt.KeepAspectRatio))  
-                os.remove(f"./task-08/{pokemon_name}.png")         # no need to download yet
+                os.remove(f"../task-08/{pokemon_name}.png")         # no need to download yet
 
                 self.label2.setText(f"Name: {pokemon_name}")
 
@@ -158,7 +178,7 @@ class SearchWindow(QWidget):
 
 
             except:
-                self.label2.setText("API Error")    # incase the user isn't a pokemon fan
+                self.label2.setText("API error")    # incase the user isn't a pokemon fan
                 self.label3.setText("")
                 self.label4.setText("")
                 self.label5.setText("")
@@ -183,14 +203,17 @@ class SearchWindow(QWidget):
         official_artwork_url = response['sprites']['other']['official-artwork']['front_default']
         image_response = requests.get(official_artwork_url, stream=True)
 
-        with open(f"./task-08/pokemon_images/{pokemon_name}.png", 'wb') as out_file:
+        with open(f"../task-08/pokemon_images/{pokemon_name}.png", 'wb') as out_file:
             shutil.copyfileobj(image_response.raw, out_file)
+        self.captureConfirmed()
 
 
     # 3 #
     # Display all the Pokémon captured with their respective names using a new window.
     def getPoke(self):
-        pass
+        if self.w is None:
+            self.w = PokemonWindow()
+        self.w.show()
 
 if __name__ == "__main__":
     import sys

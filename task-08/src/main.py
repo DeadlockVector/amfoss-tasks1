@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
 
         labelmov = QLabel(self)
         labelmov.setScaledContents(True)
-        movie = QMovie("./task-08/assets/openingpokeball-pokemon.gif")
+        movie = QMovie("../task-08/assets/openingpokeball-pokemon.gif")
         labelmov.setGeometry(QRect(0, 0, 900,478))
         labelmov.setMovie(movie)
         movie.start() 
@@ -63,6 +63,7 @@ class MainWindow(QMainWindow):
     def open_search_window(self, checked):
         if self.w is None:
             self.w = SearchWindow()
+            self.hide()
         self.w.show()
 
 if __name__ == "__main__":
