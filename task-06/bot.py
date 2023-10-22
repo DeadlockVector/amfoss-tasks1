@@ -46,7 +46,7 @@ async def results(ctx):
 # send the csv file to the chat
 @client.command()
 async def generate(ctx):
-    await ctx.send(file=discord.File(r'task-06/info.csv'))
+    await ctx.send(file=discord.File(r'../task-06/info.csv'))
 
 @client.command()
 async def clearHistory(ctx):
