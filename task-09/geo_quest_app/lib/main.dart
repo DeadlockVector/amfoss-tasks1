@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geo_quest_app/splash.dart';
@@ -31,6 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool markerAdded = false;
   List<GeoPoint> markerPoints = [];
+  late RoadInfo roadInfo;
 
   final _mapController = MapController.withUserPosition(
         trackUserLocation: const UserTrackingOption(
@@ -62,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ));
 
           
-           RoadInfo roadInfo = await _mapController.drawRoad( 
+            roadInfo = await _mapController.drawRoad( 
             userLocation,
             GeoPoint(latitude: position.latitude, longitude: position.longitude),
             roadType: RoadType.car,
@@ -86,71 +88,104 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Colors.green,
         
-        title:  const Center(
+      title:  const Center(
           child: Text('GeoQuest', style: TextStyle(color: Colors.white,)),
           )
         ),
       body: OSMFlutter( 
-        controller:_mapController,
-        osmOption: OSMOption(
-              userTrackingOption: const UserTrackingOption(
-              enableTracking: true,
-              unFollowUser: false,
-            ),
-            zoomOption: const ZoomOption(
-                  initZoom: 8,
-                  minZoomLevel: 3,
-                  maxZoomLevel: 19,
-                  stepZoom: 1.0,
-            ),
-            userLocationMarker: UserLocationMaker(
-                personMarker: const MarkerIcon(
-                    icon: Icon(
-                        Icons.location_history_rounded,
-                        color: Colors.red,
-                        size: 48,
+            controller:_mapController,
+            osmOption: OSMOption(
+                  userTrackingOption: const UserTrackingOption(
+                  enableTracking: true,
+                  unFollowUser: false,
+                ),
+                zoomOption: const ZoomOption(
+                      initZoom: 8,
+                      minZoomLevel: 3,
+                      maxZoomLevel: 19,
+                      stepZoom: 1.0,
+                ),
+                userLocationMarker: UserLocationMaker(
+                    personMarker: const MarkerIcon(
+                        icon: Icon(
+                            Icons.location_history_rounded,
+                            color: Colors.red,
+                            size: 48,
+                        ),
+                    ),
+                    directionArrowMarker: const MarkerIcon(
+                        icon: Icon(
+                            Icons.double_arrow,
+                            size: 48,
+                        ),
                     ),
                 ),
-                directionArrowMarker: const MarkerIcon(
-                    icon: Icon(
-                        Icons.double_arrow,
-                        size: 48,
-                    ),
+                roadConfiguration: const RoadOption(
+                        roadColor: Colors.yellowAccent,
+                ),
+                markerOption: MarkerOption(
+                    defaultMarker: const MarkerIcon(
+                        icon: Icon(
+                          Icons.person_pin_circle,
+                          color: Colors.blue,
+                          size: 56,
+                        ),
+                    )
                 ),
             ),
-            roadConfiguration: const RoadOption(
-                    roadColor: Colors.yellowAccent,
+            onMapIsReady: (isReady) async {
+              if(isReady) {
+                await Future.delayed(const Duration(seconds: 1), () async {
+                  await _mapController.currentLocation();
+                });
+              }
+            },
+          ),
+      bottomNavigationBar: markerAdded ? 
+      BottomAppBar(
+        color: Colors.white,
+        child: Row (
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              'Time: ${roadInfo.duration!~/60} min',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+              ),
             ),
-            markerOption: MarkerOption(
-                defaultMarker: const MarkerIcon(
-                    icon: Icon(
-                      Icons.person_pin_circle,
-                      color: Colors.blue,
-                      size: 56,
-                    ),
-                )
+            IconButton(
+              icon:  const Icon(Icons.delete),
+              onPressed: () { 
+                if (markerPoints.isNotEmpty) {
+                          _mapController.removeMarker(markerPoints[0]);
+                          _mapController.clearAllRoads();
+                          markerPoints.removeAt(0);
+                          markerAdded = false;
+                          setState(() {});
+                }
+              },
             ),
+            Text(
+              'Distance: ${roadInfo.distance!.toInt()} km',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+              ),
+            ),
+          ],
         ),
-        onMapIsReady: (isReady) async {
-          if(isReady) {
-            await Future.delayed(const Duration(seconds: 1), () async {
-              await _mapController.currentLocation();
-            }
-           );
-          }
-        },
-    ),
-      bottomNavigationBar: BottomAppBar(
+      ) 
+      
+      : const BottomAppBar(
         color: Colors.green,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding:  EdgeInsets.all(10.0),
           child: Center(child: Text(
-              markerAdded
-                  ? 'Time: XX min        Distance: XX km' 
-                  : 'Long Tap to place a marker!',
-               style: const TextStyle(
+                  'Long Tap to place a marker!',
+               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 18,
               ),
             ),
           ),
@@ -159,4 +194,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
