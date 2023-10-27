@@ -53,7 +53,7 @@ class PokemonWindow(QWidget):
     def update_image(self):
         image_pixmap = QPixmap(self.list_images[self.image_index])
         self.pokemon_image_label.setPixmap(image_pixmap.scaled(self.pokemon_image_label.size(), Qt.KeepAspectRatio))
-        self.label_pokemonName.setText(self.list_images[self.image_index][25:-4].capitalize())
+        self.label_pokemonName.setText(self.list_images[self.image_index][26:-4].capitalize())
 
 if __name__ == "__main__":
     import sys

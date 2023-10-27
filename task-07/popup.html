@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>May The Weather Be With YOU</title>
+		<link rel="stylesheet" href="styles.css"></link>
+	</head>
+
+	<body>
+		<p class="location">
+			<span id="text_location"></span>
+			<sup id="text_location_country"></sup>
+		</p>
+
+		<div class="temp">
+			<span id="text_temp"></span>
+			<sup>°C</sup>
+		</div>
+
+		<p id="text_desc"></p>
+
+		<div class="wind_speed">
+			Wind Speed: <span id="text_feels_like"></span> m/s
+			<sup>°C</sup>
+		</div>
+		
+		<div class="search-bar">
+			<input type="text" id="cityInput" placeholder="Enter a city">
+			<button id="searchButton">Search</button>
+		</div>
+
+	</body>
+
+	<script src="script.js"></script> 
+
+</html>
