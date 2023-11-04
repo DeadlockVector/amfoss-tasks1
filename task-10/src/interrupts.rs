@@ -109,10 +109,10 @@ fn add_character(chars: &mut [Option<char>; ARRAY_SIZE], character: char) -> Res
     // Find the first available index (None) and insert the new character
     unsafe {
         for i in COUNT..ARRAY_SIZE-1 {
-            let index = ARRAY_SIZE - i - 2;
-            if chars[index].is_none() {
+            // let index = ARRAY_SIZE - i - 2;
+            if chars[i].is_none() {
                 COUNT += 1;
-                chars[index] = Some(character);
+                chars[i] = Some(character);
                 return Ok(());
             }
         }
