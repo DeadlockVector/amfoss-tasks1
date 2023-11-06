@@ -20,12 +20,15 @@ searchButton.addEventListener("click", () =>  {
         console.log(jsonData)
         
         if (jsonData.cod == '404') {
-            document.getElementById("i").innerHTML = "City Not Found"
+
+            document.getElementById("text_location").innerHTML = "City Not Found"
             document.getElementById("text_location_country").innerHTML = ""
 
             document.getElementById("text_temp").innerHTML = ""
 
             document.getElementById("text_desc").innerHTML = ""
+
+            document.getElementById("text_feels_like").innerHTML = ""
 
         }
         else {

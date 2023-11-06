@@ -2,14 +2,14 @@ body {
     width: 400px;
     height: 400px;
     margin: 0;
-
+    padding:0;
+    background-image: url('../task-07/assets/background.jpg'); 
+    background-size: cover; 
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-
     border-radius: 20px;
-    background: white;
 }
 
 p {
