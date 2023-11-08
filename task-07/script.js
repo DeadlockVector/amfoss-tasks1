@@ -1,4 +1,4 @@
-const API_KEY = '53545af378bb63d7395971254a2a54ac';
+const API_KEY = '';
 
 fetch(`https://api.openweathermap.org/data/2.5/weather?q=bengaluru&units=metric&appid=${API_KEY}`).then((data) => data.json())
     .then(( jsonData ) => {
